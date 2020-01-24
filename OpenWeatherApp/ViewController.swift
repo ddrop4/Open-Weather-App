@@ -10,14 +10,20 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    //MARK: - Properties
+    
     var cities: [String] = ["Miami", "Los-Angeles", "California", "New-York", "London", "Manchester", "Liverpool", "Birmingham", "Munchen", "Dortmund"]
 
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         addSubviews()
     }
+    
+    // MARK: - UI Methods
     
     func addSubviews() {
         setupTableView()
