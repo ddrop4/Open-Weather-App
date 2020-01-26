@@ -15,6 +15,7 @@
 		9DCC7DA723DB67BF00A56E1B /* ViewController+PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCC7DA623DB67BF00A56E1B /* ViewController+PickerView.swift */; };
 		9DCC7DA923DB685600A56E1B /* ViewController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCC7DA823DB685600A56E1B /* ViewController+TableView.swift */; };
 		9DCC7DAB23DB696D00A56E1B /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCC7DAA23DB696D00A56E1B /* TableViewCell.swift */; };
+		D0EA869523DE099E00B509A0 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA869423DE099E00B509A0 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		9DCC7DA623DB67BF00A56E1B /* ViewController+PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+PickerView.swift"; sourceTree = "<group>"; };
 		9DCC7DA823DB685600A56E1B /* ViewController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TableView.swift"; sourceTree = "<group>"; };
 		9DCC7DAA23DB696D00A56E1B /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		D0EA869423DE099E00B509A0 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		9DCC7D8D23DB541700A56E1B /* OpenWeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				D0EA869323DE099300B509A0 /* Manager */,
 				9DCC7DA523DB67A900A56E1B /* Extensions */,
 				9DCC7DA223DB54AC00A56E1B /* ViewControllers */,
 				9DCC7D8E23DB541700A56E1B /* AppDelegate.swift */,
@@ -87,6 +90,14 @@
 				9DCC7DA823DB685600A56E1B /* ViewController+TableView.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D0EA869323DE099300B509A0 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				D0EA869423DE099E00B509A0 /* NetworkManager.swift */,
+			);
+			name = Manager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,6 +173,7 @@
 				9DCC7DA723DB67BF00A56E1B /* ViewController+PickerView.swift in Sources */,
 				9DCC7DA423DB54BA00A56E1B /* NavigationViewController.swift in Sources */,
 				9DCC7D9323DB541700A56E1B /* ViewController.swift in Sources */,
+				D0EA869523DE099E00B509A0 /* NetworkManager.swift in Sources */,
 				9DCC7DAB23DB696D00A56E1B /* TableViewCell.swift in Sources */,
 				9DCC7DA923DB685600A56E1B /* ViewController+TableView.swift in Sources */,
 				9DCC7D8F23DB541700A56E1B /* AppDelegate.swift in Sources */,
@@ -303,7 +315,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UX698QMC48;
 				INFOPLIST_FILE = OpenWeatherApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -322,7 +334,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UX698QMC48;
 				INFOPLIST_FILE = OpenWeatherApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
