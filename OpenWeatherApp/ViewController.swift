@@ -7,17 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
     
     let networkManager = NetworkManager()
+    let tableView = UITableView(frame: .zero, style: .grouped)
     
     //MARK: - Properties
     
-    var cities: [String] = ["Miami", "Los-Angeles", "California", "New-York", "London", "Manchester", "Liverpool", "Birmingham", "Moscow", "Dortmund"]
-    var temperature: [String] = []
-    var date: [String] = []
-    var temperatureSign: [String] = []
+    var weather: [City] = []
+    var city: City!
 
     // MARK: - LifeCycle
     
@@ -29,12 +29,25 @@ class ViewController: UIViewController {
         networkManager.getData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<City> = City.fetchRequest()
+        
+        do {
+            weather = try managedContext.fetch(fetchRequest)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     // MARK: - UI Methods
     
     func addSubviews() {
         setupTableView()
         setupLeftLabel()
-//        setupPicker()
         setupRightButton()
     }
     
@@ -53,47 +66,10 @@ class ViewController: UIViewController {
         let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCity))
         self.navigationItem.setRightBarButton(rightBarButton, animated: true)
     }
-    
-    @objc
-    func addCity() {
-        let addCityAlert = UIAlertController(title: "Добавьте свой город", message: "Название города должно быть написано используя только латинские буквы", preferredStyle: .alert)
-        addCityAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        addCityAlert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
-        addCityAlert.addTextField(configurationHandler: nil)
-        
-        self.present(addCityAlert, animated: true, completion: nil)
-    }
-    
-//    func setupPicker() {
-//        let window = UIWindow()
-//        let width = window.frame.size.width
-//        let height = window.frame.size.height
-//
-//        let cityPicker = UIPickerView(frame: .zero)
-//        cityPicker.frame = CGRect(x: 0, y: 300, width: width, height: height)
-//
-//        cityPicker.delegate = self
-//        cityPicker.dataSource = self
-//
-//        view.addSubview(cityPicker)
-//    }
-    
+
     func setupTableView() {
-//        let customView = UIView(frame: .zero)
-//        let label = UILabel(frame: .zero)
-//        label.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-//        label.text = "Cities"
-//        label.textColor = .systemBlue
-//        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-//        customView.addSubview(label)
-        
-        let window = UIWindow()
-        let width = window.frame.size.width
-        let height = window.frame.size.height
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.frame = CGRect(x: 0, y: 25, width: self.view.bounds.size.width, height: self.view.bounds.size.height - 25)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
-        tableView.frame = CGRect(x: 0, y: 25, width: width, height: height)
-//        tableView.tableHeaderView = customView
         tableView.sectionHeaderHeight = 40
         
         tableView.dataSource = self
@@ -101,5 +77,37 @@ class ViewController: UIViewController {
         
         view.addSubview(tableView)
     }
-
+    
+    @objc
+    func addCity() {
+        let alert = UIAlertController(title: "Добавьте свой город", message: "Название города должно быть написано используя только латинские буквы", preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "Сохранить", style: .default) { action in
+            guard let textField = alert.textFields?.first else { return }
+            self.save(city: (textField.text)!)
+            self.tableView.reloadData()
+        }
+        
+        alert.addAction(saveAction)
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+        alert.addTextField(configurationHandler: nil)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func save(city: String) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "City", in: managedContext)
+        let cityObject = NSManagedObject(entity: entity!, insertInto: managedContext) as! City
+        
+        cityObject.name = city
+        do {
+            try managedContext.save()
+            weather.append(cityObject)
+            print("Saved! Well done!")
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
 }

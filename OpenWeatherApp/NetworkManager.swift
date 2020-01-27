@@ -16,8 +16,8 @@ class NetworkManager {
         components.scheme = "https"
         components.host = "samples.openweathermap.org"
         components.path = "/data/2.5/forecast"
-        components.queryItems = [URLQueryItem(name: "appid", value: appId),
-                                 URLQueryItem(name: "q", value: "London")]
+        components.queryItems = [URLQueryItem(name: "q", value: "London"),
+                                 URLQueryItem(name: "appid", value: appId)]
         return components
     }
     
@@ -25,8 +25,8 @@ class NetworkManager {
         guard let url = self.urlComponents.url else { return }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else { return }
-            print(String(data: data, encoding: .utf8)!)
             print(url)
+            print(String(data: data, encoding: .utf8)!)
         }
         task.resume()
     }
