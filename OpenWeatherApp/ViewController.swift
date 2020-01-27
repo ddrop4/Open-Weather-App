@@ -11,13 +11,13 @@ import CoreData
 
 class ViewController: UIViewController {
     
-    let networkManager = NetworkManager()
-    let tableView = UITableView(frame: .zero, style: .grouped)
-    
     //MARK: - Properties
     
     var weather: [City] = []
     var city: City!
+    let networkManager = NetworkManager()
+    let tableView = UITableView(frame: .zero, style: .grouped)
+    let customView = UILabel(frame: .zero)
 
     // MARK: - LifeCycle
     
@@ -32,15 +32,7 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<City> = City.fetchRequest()
-        
-        do {
-            weather = try managedContext.fetch(fetchRequest)
-        } catch {
-            print(error.localizedDescription)
-        }
+        fetchCities()
     }
     
     // MARK: - UI Methods
@@ -52,8 +44,6 @@ class ViewController: UIViewController {
     }
     
     func setupLeftLabel() {
-        let customView = UILabel(frame: .zero)
-        
         customView.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         customView.text = "WEATHER"
         customView.textColor = UIColor.darkGray
@@ -76,6 +66,18 @@ class ViewController: UIViewController {
         tableView.delegate = self
         
         view.addSubview(tableView)
+    }
+    
+    func fetchCities() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<City> = City.fetchRequest()
+        
+        do {
+            weather = try managedContext.fetch(fetchRequest)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     @objc
