@@ -8,27 +8,54 @@
 
 import Foundation
 
+struct Weather: Codable {
+    var temp: Double
+}
+
 class NetworkManager {
     
-    var urlComponents: URLComponents {
+    func weatherQuery(_ city: String, completion: ((Data) -> ())?) {
         var components = URLComponents()
         let appId = "b6907d289e10d714a6e88b30761fae22"
         components.scheme = "https"
         components.host = "samples.openweathermap.org"
         components.path = "/data/2.5/forecast"
-        components.queryItems = [URLQueryItem(name: "q", value: "London"),
+        components.queryItems = [URLQueryItem(name: "q", value: city),
                                  URLQueryItem(name: "appid", value: appId)]
-        return components
-    }
-    
-    func getData() {
-        guard let url = self.urlComponents.url else { return }
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+        guard let url = components.url else { return }
+        let task = URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard let data = data else { return }
-            print(url)
-            print(String(data: data, encoding: .utf8)!)
+            do {
+                guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { return }
+                if let jsonDict = json["list"] as? [[String: Any]] {
+//                    print(jsonDict)
+                    for jsonKey in jsonDict {
+                        if let jsonValue = jsonKey["main"] as? [String: Any] {
+//                            print(jsonValue)
+                            if let jsonValuev = jsonValue["temp"] as? Double {
+                                print("That is current temperature in \(city) - \(jsonValuev)")
+                            } else {
+                                // error
+                            }
+                        } else {
+                        // error
+                        }
+                    }
+                } else {
+                    // error
+                }
+                print("\(city) is printed")
+            } catch {
+                print(error.localizedDescription)
+            }
         }
         task.resume()
+    }
+    
+    func downloadTemperature(_ city: String) {
+        weatherQuery(city) { (json) in
+            
+        }
     }
     
 }

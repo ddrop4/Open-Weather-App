@@ -26,13 +26,13 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .white
         addSubviews()
-        networkManager.getData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         fetchCities()
+        getCityNames()
     }
     
     // MARK: - UI Methods
@@ -77,6 +77,13 @@ class ViewController: UIViewController {
             weather = try managedContext.fetch(fetchRequest)
         } catch {
             print(error.localizedDescription)
+        }
+    }
+    
+    func getCityNames() {
+        let array = weather
+        for i in array {
+            networkManager.weatherQuery(i.name!, completion: nil)
         }
     }
     
