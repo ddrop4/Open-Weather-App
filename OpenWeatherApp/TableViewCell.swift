@@ -10,4 +10,8 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
     
+    private func configure() {
+        
+    }
+    
 }

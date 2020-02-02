@@ -13,11 +13,13 @@ class ViewController: UIViewController {
     
     //MARK: - Properties
     
+    let tableView = UITableView(frame: .zero, style: .grouped)
     var weather: [City] = []
     var city: City!
     let networkManager = NetworkManager()
-    let tableView = UITableView(frame: .zero, style: .grouped)
     let customView = UILabel(frame: .zero)
+    let loader = UIActivityIndicatorView(style: .gray)
+    var weatherArray: [Int] = []
 
     // MARK: - LifeCycle
     
@@ -25,6 +27,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        setupLoader(animated: true)
         addSubviews()
     }
     
@@ -32,25 +35,32 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         
         fetchCities()
-        getCityNames()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+//            self!.setupTableView()
+//        }
     }
     
-    // MARK: - UI Methods
+    // MARK: - Setup UI
     
     func addSubviews() {
         setupTableView()
-        setupLeftLabel()
+//        setupLeftLabel()
         setupRightButton()
+        setupNavBarTitle()
     }
     
-    func setupLeftLabel() {
-        customView.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        customView.text = "WEATHER"
-        customView.textColor = UIColor.darkGray
-        
-        let leftBarButton = UIBarButtonItem(customView: customView)
-        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
+    func setupNavBarTitle() {
+        self.navigationItem.title = "Средняя температура - 39 градусов"
     }
+    
+//    func setupLeftLabel() {
+//        customView.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+//        customView.text = "WEATHER"
+//        customView.textColor = UIColor.darkGray
+//
+//        let leftBarButton = UIBarButtonItem(customView: customView)
+//        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
+//    }
     
     func setupRightButton() {
         let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCity))
@@ -68,6 +78,13 @@ class ViewController: UIViewController {
         view.addSubview(tableView)
     }
     
+    func setupLoader(animated: Bool) {
+        loader.center = view.center
+        loader.hidesWhenStopped = false
+        view.addSubview(loader)
+        loader.startAnimating()
+    }
+    
     func fetchCities() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -77,13 +94,6 @@ class ViewController: UIViewController {
             weather = try managedContext.fetch(fetchRequest)
         } catch {
             print(error.localizedDescription)
-        }
-    }
-    
-    func getCityNames() {
-        let array = weather
-        for i in array {
-            networkManager.weatherQuery(i.name!, completion: nil)
         }
     }
     
