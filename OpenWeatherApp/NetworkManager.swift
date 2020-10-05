@@ -55,3 +55,98 @@ class NetworkManager {
      label.text = "Temperature in \(city[indexPath.row].name!) is \(celcius)"
  }
  */
+
+    func configureURL(path: String, host: String?, scheme: String?, query: URLQueryItem) -> URL? {
+        var components = URLComponents()
+        
+        components.scheme = scheme
+        components.host = host
+        components.path = path
+        components.queryItems = [URLQueryItem(name: "key", value: API_KEY), query]
+        
+        return components.url
+    }
+    
+    func getData(cities: [String], completion: ((Weather) -> ())?) {
+        for city in cities {
+            guard let url = configureURL(path: "/v1/current.json", host: "api.weatherapi.com", scheme: "http", query: URLQueryItem(name: "q", value: city)) else { return }
+            let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else { return }
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { return }
+                    if let current = json["current"] as? [String: Any] {
+                        if let key = current["temp_c"] as? Double, let date = current["last_updated"] as? String, let condition = current["condition"] as? [String: Any] {
+                            if let text = condition["icon"] as? String {
+                                let stats = Weather.init(currentWeather: Current(date: date, icon: text, temperature: Int(key)))
+                                completion?(stats)
+                            }
+                        } else {
+                            // error
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+            dataTask.resume()
+        }
+    }
+    
+    func getPicture(urls: [String], completion: ((Data) -> ())?) {
+        for iconURL in urls {
+            let kek = iconURL.replacingOccurrences(of: "//", with: "http://")
+            guard let url = URL(string: kek) else { return }
+            let datatask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else { return }
+                completion?(data)
+            }
+            datatask.resume()
+        }
+    }    func configureURL(path: String, host: String?, scheme: String?, query: URLQueryItem) -> URL? {
+            var components = URLComponents()
+            
+            components.scheme = scheme
+            components.host = host
+            components.path = path
+            components.queryItems = [URLQueryItem(name: "key", value: API_KEY), query]
+            
+            return components.url
+        }
+        
+        func getData(cities: [String], completion: ((Weather) -> ())?) {
+            for city in cities {
+                guard let url = configureURL(path: "/v1/current.json", host: "api.weatherapi.com", scheme: "http", query: URLQueryItem(name: "q", value: city)) else { return }
+                let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                    guard let data = data else { return }
+                    do {
+                        guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { return }
+                        if let current = json["current"] as? [String: Any] {
+                            if let key = current["temp_c"] as? Double, let date = current["last_updated"] as? String, let condition = current["condition"] as? [String: Any] {
+                                if let text = condition["icon"] as? String {
+                                    let stats = Weather.init(currentWeather: Current(date: date, icon: text, temperature: Int(key)))
+                                    completion?(stats)
+                                }
+                            } else {
+                                // error
+                            }
+                        }
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                dataTask.resume()
+            }
+        }
+        
+        func getPicture(urls: [String], completion: ((Data) -> ())?) {
+            for iconURL in urls {
+                let kek = iconURL.replacingOccurrences(of: "//", with: "http://")
+                guard let url = URL(string: kek) else { return }
+                let datatask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                    guard let data = data else { return }
+                    completion?(data)
+                }
+                datatask.resume()
+            }
+        }
+
