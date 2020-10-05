@@ -53,14 +53,14 @@ class ViewController: UIViewController {
         self.navigationItem.title = "Средняя температура - 39 градусов"
     }
     
-//    func setupLeftLabel() {
-//        customView.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-//        customView.text = "WEATHER"
-//        customView.textColor = UIColor.darkGray
-//
-//        let leftBarButton = UIBarButtonItem(customView: customView)
-//        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
-//    }
+    func setupLeftLabel() {
+        customView.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        customView.text = "WEATHER"
+        customView.textColor = UIColor.darkGray
+
+        let leftBarButton = UIBarButtonItem(customView: customView)
+        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
+    }
     
     func setupRightButton() {
         let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCity))
