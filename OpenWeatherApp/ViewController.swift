@@ -37,6 +37,12 @@ class ViewController: UIViewController {
         
         return alert
     }()
+    
+    private lazy var plusButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTextField))
+        
+        return button
+    }()
 
     // MARK: - LifeCycle
     
